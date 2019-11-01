@@ -116,12 +116,10 @@ public class Controller {
         }
 
         if (input.getDurationMinutes() != null) {
-            logger.error("Current end {} duration {}", reservation.getEnd(), reservation.getDurationMinutes());
             reservation.setDurationMinutes(input.getDurationMinutes());
             reservation.setEnd(new Date(reservation.getStart().getTime() +
                     (reservation.getDurationMinutes() * 60 * 1000)));
             reservation.setCost(input.getDurationMinutes() * reservation.getSpot().getRate());
-            logger.error("New end {} duration {}", reservation.getEnd(), reservation.getDurationMinutes());
         }
         if (input.getState() != null) {
             reservation.setState(input.getState());

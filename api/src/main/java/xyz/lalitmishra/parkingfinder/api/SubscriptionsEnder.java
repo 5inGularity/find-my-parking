@@ -41,18 +41,15 @@ public class SubscriptionsEnder {
 
     @EventListener({ReservationChangeEvent.class})
     public void handleReservationChangeEvent(ReservationChangeEvent event) {
-        logger.info("Got event for reservation update");
         if(!event.getReservation().getState().equals("ACTIVE")) {
             return;
         }
         synchronized (SubscriptionsEnder.class) {
             if (enderFuture == null || enderFuture.isDone()) {
-                logger.info("Scheduling task immediately");
                 enderFuture = schedulers.getSubscriptionSchedule().schedule(
                         new SubscriptionEnderRunnable(spots, reservations, schedulers), 1, TimeUnit.MILLISECONDS);
             } else if (enderFuture.getDelay(TimeUnit.MILLISECONDS) >
                     event.getReservation().getSpot().getReservedTill().getTime()) {
-                logger.info("Scheduling task immediately");
                 // new/change reservation is going to expire earlier. Cancel and restart the task.
                 enderFuture.cancel(true);
                 enderFuture = schedulers.getSubscriptionSchedule().schedule(
@@ -63,6 +60,9 @@ public class SubscriptionsEnder {
 
     @EventListener({ContextClosedEvent.class})
     public void handleContextClosedEvent(ContextClosedEvent evt) {
+        if (enderFuture != null) {
+            enderFuture.cancel(true);
+        }
         schedulers.getSubscriptionSchedule().shutdownNow();
     }
 
