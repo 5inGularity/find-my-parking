@@ -8,25 +8,25 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private long id;
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
     private boolean validated;
-    @Column(name="validation_code")
+    @Column(name = "validation_code")
     private String validationCode;
-    @Column(name="password_hash")
+    @Column(name = "password_hash")
     @JsonIgnore
     @ToString.Exclude
     private String passwordHash;
-    @Column(name="password_salt")
+    @Column(name = "password_salt")
     @JsonIgnore
     @ToString.Exclude
     private String passwordSalt;

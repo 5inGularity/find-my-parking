@@ -7,27 +7,29 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="reservations")
+@Table(name = "reservations")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Reservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="spotid")
+    @JoinColumn(name = "spotid")
     private Spot spot;
 
-    @Column(name="userid")
+    @Column(name = "userid")
     private long userId;
 
+    private String state;
     @Temporal(TemporalType.TIMESTAMP)
     private Date start;
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
-    private int duration;
+    @Column(name = "duration")
+    private Integer durationMinutes;
     private int cost;
 }
